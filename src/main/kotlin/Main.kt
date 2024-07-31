@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,16 +19,29 @@ import com.multiplatform.webview.web.rememberWebViewState
 @Composable
 @Preview
 fun App() {
+    var input by remember { mutableStateOf("") }
     var text by remember { mutableStateOf("Hello, World!") }
 
     MaterialTheme {
         Column {
             Button(onClick = {
-                text = "Hello, Desktop!"
+                val result = ""
+                HTMLConverter().extractIssueLinks(input).forEach {
+                    println(it.href + " / " + it.text)
+                    result + it.href + " / " + it.text + "\n"
+                }
+                text = result
+
             }) {
-                Text(text)
+                Text("click")
             }
-            WebViewSample()
+            Text(text = text)
+            TextField(
+                value = input,
+                onValueChange = { changedValue ->
+                    input = changedValue
+                }
+            )
         }
     }
 }

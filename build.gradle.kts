@@ -18,6 +18,7 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
+    implementation("org.jsoup:jsoup:1.15.3")
 }
 
 kotlin {
