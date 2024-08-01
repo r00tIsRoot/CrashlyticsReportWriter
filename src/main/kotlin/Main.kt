@@ -27,7 +27,8 @@ fun App() {
             Button(onClick = {
                 val result = ""
                 HTMLConverter().extractIssueLinks(input).forEach {
-                    println(it.href + " / " + it.text)
+                    println(it.href + "\n" + it.text)
+                    println()
                     result + it.href + " / " + it.text + "\n"
                 }
                 text = result
