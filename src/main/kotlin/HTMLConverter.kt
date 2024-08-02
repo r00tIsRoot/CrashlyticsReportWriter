@@ -3,7 +3,24 @@ import org.jsoup.nodes.Document
 
 class HTMLConverter {
 
-    data class IssueLink(val href: String, val text: String)
+    data class IssueLink(
+        val href: String,
+        val text: String,
+        val issueId: String,
+        val url: String,
+        val title: String,
+        val subTitle: String,
+        val minVersion: String,
+        val latestVersion: String,
+        val eventCountIn24: Int,
+        val userCountIn24: Int,
+        val eventCountIn90Days: Int,
+        val userCountIn90Days: Int,
+    ) {
+        fun String.toMinVersion(): String {
+            return
+        }
+    }
 
     fun extractIssueLinks(html: String): List<IssueLink> {
         // Parse the HTML document
