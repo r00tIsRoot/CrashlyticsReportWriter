@@ -1,6 +1,5 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -15,34 +14,128 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.rememberWebViewState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 @Preview
 fun App() {
-    var input by remember { mutableStateOf("") }
-    var text by remember { mutableStateOf("Hello, World!") }
+    var inputIn24Hours by remember { mutableStateOf("") }
+    var inputIn90Days by remember { mutableStateOf("") }
+    var textIn24Hours by remember { mutableStateOf("Hello, World!") }
+    var textIn90Days by remember { mutableStateOf("Hello, World!") }
 
     MaterialTheme {
         Column {
             Button(onClick = {
-                val result = ""
-                HTMLConverter().extractIssueLinks(input).forEach {
-                    println(it.href + "\n" + it.text)
-                    println()
-                    result + it.href + " / " + it.text + "\n"
+                textIn24Hours = "LastTwentyFourHours"
+                textIn90Days = "LastNinetyDays"
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val stringBuilder = StringBuilder()
+
+                    HTMLConverter().extractIssueLinks(inputIn24Hours, CrashPeriodRange.LastTwentyFourHours).forEach {
+                        println(
+                            "LastTwentyFourHours" +
+                                    "issuId:${it.issueId}\n" +
+                                    "url:${it.url}\n" +
+                                    "title:${it.title}\n" +
+                                    "subTitle:${it.subTitle}\n" +
+                                    "minVersion:${it.minVersion}\n" +
+                                    "latestVersion:${it.latestVersion}\n" +
+                                    "eventCount:${it.eventCountIn24}\n" +
+                                    "userCount:${it.userCountIn24}"
+                        )
+                        println()
+                        stringBuilder.append( "\n" +
+                                "issuId:${it.issueId}\n" +
+                                "url:${it.url}\n" +
+                                "title:${it.title}\n" +
+                                "subTitle:${it.subTitle}\n" +
+                                "minVersion:${it.minVersion}\n" +
+                                "latestVersion:${it.latestVersion}\n" +
+                                "eventCount:${it.eventCountIn24}\n" +
+                                "userCount:${it.userCountIn24}\n"
+                        )
+
+                        withContext(Dispatchers.Main) {
+                            textIn24Hours = stringBuilder.toString()
+                        }
+                    }
                 }
-                text = result
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val stringBuilder = StringBuilder()
+
+                    HTMLConverter().extractIssueLinks(inputIn90Days, CrashPeriodRange.LastNinetyDays).forEach {
+                        println(
+                            "LastNinetyDays" +
+                                    "issuId:${it.issueId}\n" +
+                                    "url:${it.url}\n" +
+                                    "title:${it.title}\n" +
+                                    "subTitle:${it.subTitle}\n" +
+                                    "minVersion:${it.minVersion}\n" +
+                                    "latestVersion:${it.latestVersion}\n" +
+                                    "eventCount:${it.eventCountIn24}\n" +
+                                    "userCount:${it.userCountIn24}\n"
+                        )
+                        println()
+                        stringBuilder.append( "\n" +
+                                "issuId:${it.issueId}\n" +
+                                "url:${it.url}\n" +
+                                "title:${it.title}\n" +
+                                "subTitle:${it.subTitle}\n" +
+                                "minVersion:${it.minVersion}\n" +
+                                "latestVersion:${it.latestVersion}\n" +
+                                "eventCount:${it.eventCountIn90Days}\n" +
+                                "userCount:${it.userCountIn90Days}\n"
+                        )
+
+                        withContext(Dispatchers.Main) {
+                            textIn90Days = stringBuilder.toString()
+                        }
+                    }
+                }
 
             }) {
                 Text("click")
             }
-            Text(text = text)
-            TextField(
-                value = input,
-                onValueChange = { changedValue ->
-                    input = changedValue
-                }
-            )
+            Row(modifier = Modifier.fillMaxWidth()) {
+                TextField(
+                    value = textIn24Hours,
+                    modifier = Modifier.weight(1f), // 가중치 설정
+                    onValueChange = {}
+
+                )
+                TextField(
+                    value = textIn90Days,
+                    modifier = Modifier.weight(1f), // 가중치 설정
+                    onValueChange = {}
+                )
+            }
+
+            Row(modifier = Modifier.fillMaxWidth()) {
+                TextField(
+                    value = inputIn24Hours,
+                    onValueChange = { changedValue ->
+                        inputIn24Hours = changedValue
+                    },
+                    modifier = Modifier
+                        .weight(1f),
+                    maxLines = 3 // 최대 3줄로 설정
+                )
+                TextField(
+                    value = inputIn90Days,
+                    onValueChange = { changedValue ->
+                        inputIn90Days = changedValue
+                    },
+                    modifier = Modifier
+                        .weight(1f),
+                    maxLines = 3 // 최대 3줄로 설정
+                )
+            }
         }
     }
 }
