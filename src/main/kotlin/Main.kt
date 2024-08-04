@@ -45,6 +45,8 @@ fun App() {
                                 "url:${it.url}\n" +
                                 "title:${it.title}\n" +
                                 "subTitle:${it.subTitle}\n" +
+                                "description:${it.description}\n" +
+                                "jiraLink:${it.jiraLink}\n" +
                                 "minVersion:${it.minVersion}\n" +
                                 "latestVersion:${it.latestVersion}\n" +
                                 "eventCountIn24:${it.eventCountIn24}\n" +
@@ -54,70 +56,6 @@ fun App() {
                         )
                         withContext(Dispatchers.Main) {
                             textIn24Hours = stringBuilder.toString()
-                        }
-                    }
-
-//                    HTMLConverter().extractIssueLinks(inputIn24Hours, CrashPeriodRange.LastTwentyFourHours)
-//                        .forEach {
-////                        println(
-////                            "LastTwentyFourHours" +
-////                                    "issuId:${it.issueId}\n" +
-////                                    "url:${it.url}\n" +
-////                                    "title:${it.title}\n" +
-////                                    "subTitle:${it.subTitle}\n" +
-////                                    "minVersion:${it.minVersion}\n" +
-////                                    "latestVersion:${it.latestVersion}\n" +
-////                                    "eventCount:${it.eventCountIn24}\n" +
-////                                    "userCount:${it.userCountIn24}"
-////                        )
-////                        println()
-//                        stringBuilder.append( "\n" +
-//                                "issuId:${it.issueId}\n" +
-//                                "url:${it.url}\n" +
-//                                "title:${it.title}\n" +
-//                                "subTitle:${it.subTitle}\n" +
-//                                "minVersion:${it.minVersion}\n" +
-//                                "latestVersion:${it.latestVersion}\n" +
-//                                "eventCount:${it.eventCountIn24}\n" +
-//                                "userCount:${it.userCountIn24}\n"
-//                        )
-//
-//                        withContext(Dispatchers.Main) {
-//                            textIn24Hours = stringBuilder.toString()
-//                        }
-//                    }
-                }
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    val stringBuilder = StringBuilder()
-
-                    HTMLConverter().extractIssueLinks(inputIn90Days, CrashPeriodRange.LastNinetyDays)
-                        .forEach {
-//                        println(
-//                            "LastNinetyDays" +
-//                                    "issuId:${it.issueId}\n" +
-//                                    "url:${it.url}\n" +
-//                                    "title:${it.title}\n" +
-//                                    "subTitle:${it.subTitle}\n" +
-//                                    "minVersion:${it.minVersion}\n" +
-//                                    "latestVersion:${it.latestVersion}\n" +
-//                                    "eventCount:${it.eventCountIn24}\n" +
-//                                    "userCount:${it.userCountIn24}\n"
-//                        )
-//                        println()
-                        stringBuilder.append( "\n" +
-                                "issuId:${it.issueId}\n" +
-                                "url:${it.url}\n" +
-                                "title:${it.title}\n" +
-                                "subTitle:${it.subTitle}\n" +
-                                "minVersion:${it.minVersion}\n" +
-                                "latestVersion:${it.latestVersion}\n" +
-                                "eventCount:${it.eventCountIn90Days}\n" +
-                                "userCount:${it.userCountIn90Days}\n"
-                        )
-
-                        withContext(Dispatchers.Main) {
-                            textIn90Days = stringBuilder.toString()
                         }
                     }
                 }
