@@ -36,19 +36,10 @@ fun App() {
                 CoroutineScope(Dispatchers.IO).launch {
                     val stringBuilder = StringBuilder()
 
-                    HTMLConverter().extractIssueLinks(inputIn24Hours, CrashPeriodRange.LastTwentyFourHours).forEach {
-                        println(
-                            "LastTwentyFourHours" +
-                                    "issuId:${it.issueId}\n" +
-                                    "url:${it.url}\n" +
-                                    "title:${it.title}\n" +
-                                    "subTitle:${it.subTitle}\n" +
-                                    "minVersion:${it.minVersion}\n" +
-                                    "latestVersion:${it.latestVersion}\n" +
-                                    "eventCount:${it.eventCountIn24}\n" +
-                                    "userCount:${it.userCountIn24}"
-                        )
-                        println()
+                    val issueLinksIn24Hours = HTMLConverter().extractIssueLinks(inputIn24Hours, CrashPeriodRange.LastTwentyFourHours)
+                    val issueLinksIn90Days = HTMLConverter().extractIssueLinks(inputIn90Days, CrashPeriodRange.LastNinetyDays)
+
+                    HTMLConverter().mergeIssueLinks(issueLinksIn24Hours, issueLinksIn90Days).forEach {
                         stringBuilder.append( "\n" +
                                 "issuId:${it.issueId}\n" +
                                 "url:${it.url}\n" +
@@ -56,32 +47,64 @@ fun App() {
                                 "subTitle:${it.subTitle}\n" +
                                 "minVersion:${it.minVersion}\n" +
                                 "latestVersion:${it.latestVersion}\n" +
-                                "eventCount:${it.eventCountIn24}\n" +
-                                "userCount:${it.userCountIn24}\n"
+                                "eventCountIn24:${it.eventCountIn24}\n" +
+                                "userCountIn24:${it.userCountIn24}\n" +
+                                "eventCountIn90Days:${it.eventCountIn90Days}\n" +
+                                "userCountIn90Days:${it.userCountIn90Days}\n"
                         )
-
                         withContext(Dispatchers.Main) {
                             textIn24Hours = stringBuilder.toString()
                         }
                     }
+
+//                    HTMLConverter().extractIssueLinks(inputIn24Hours, CrashPeriodRange.LastTwentyFourHours)
+//                        .forEach {
+////                        println(
+////                            "LastTwentyFourHours" +
+////                                    "issuId:${it.issueId}\n" +
+////                                    "url:${it.url}\n" +
+////                                    "title:${it.title}\n" +
+////                                    "subTitle:${it.subTitle}\n" +
+////                                    "minVersion:${it.minVersion}\n" +
+////                                    "latestVersion:${it.latestVersion}\n" +
+////                                    "eventCount:${it.eventCountIn24}\n" +
+////                                    "userCount:${it.userCountIn24}"
+////                        )
+////                        println()
+//                        stringBuilder.append( "\n" +
+//                                "issuId:${it.issueId}\n" +
+//                                "url:${it.url}\n" +
+//                                "title:${it.title}\n" +
+//                                "subTitle:${it.subTitle}\n" +
+//                                "minVersion:${it.minVersion}\n" +
+//                                "latestVersion:${it.latestVersion}\n" +
+//                                "eventCount:${it.eventCountIn24}\n" +
+//                                "userCount:${it.userCountIn24}\n"
+//                        )
+//
+//                        withContext(Dispatchers.Main) {
+//                            textIn24Hours = stringBuilder.toString()
+//                        }
+//                    }
                 }
 
                 CoroutineScope(Dispatchers.IO).launch {
                     val stringBuilder = StringBuilder()
 
-                    HTMLConverter().extractIssueLinks(inputIn90Days, CrashPeriodRange.LastNinetyDays).forEach {
-                        println(
-                            "LastNinetyDays" +
-                                    "issuId:${it.issueId}\n" +
-                                    "url:${it.url}\n" +
-                                    "title:${it.title}\n" +
-                                    "subTitle:${it.subTitle}\n" +
-                                    "minVersion:${it.minVersion}\n" +
-                                    "latestVersion:${it.latestVersion}\n" +
-                                    "eventCount:${it.eventCountIn24}\n" +
-                                    "userCount:${it.userCountIn24}\n"
-                        )
-                        println()
+                    HTMLConverter().extractIssueLinks(inputIn90Days, CrashPeriodRange.LastNinetyDays)
+                        .forEach {
+//                        println(
+//                            "LastNinetyDays" +
+//                                    "issuId:${it.issueId}\n" +
+//                                    "url:${it.url}\n" +
+//                                    "title:${it.title}\n" +
+//                                    "subTitle:${it.subTitle}\n" +
+//                                    "minVersion:${it.minVersion}\n" +
+//                                    "latestVersion:${it.latestVersion}\n" +
+//                                    "eventCount:${it.eventCountIn24}\n" +
+//                                    "userCount:${it.userCountIn24}\n"
+//                        )
+//                        println()
                         stringBuilder.append( "\n" +
                                 "issuId:${it.issueId}\n" +
                                 "url:${it.url}\n" +
@@ -105,13 +128,16 @@ fun App() {
             Row(modifier = Modifier.fillMaxWidth()) {
                 TextField(
                     value = textIn24Hours,
-                    modifier = Modifier.weight(1f), // 가중치 설정
+                    modifier = Modifier
+                        .weight(1f),
+                    maxLines = 3,
                     onValueChange = {}
 
                 )
                 TextField(
                     value = textIn90Days,
-                    modifier = Modifier.weight(1f), // 가중치 설정
+                    modifier = Modifier.weight(1f),
+                    maxLines = 3,
                     onValueChange = {}
                 )
             }

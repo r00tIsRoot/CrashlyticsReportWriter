@@ -36,6 +36,11 @@ class HTMLConverter {
         issueLinks.forEachIndexed { index, element ->
             // Get the href attribute
             val href = element.attr("href")
+            val url =
+                if (href.isNotBlank() || href == "#")
+                    "https://console.firebase.google.com" + href.getPath()
+                else
+                    ""
             val issueId = extractIssueId(href)
 
             // Get the text inside the <a> tag
@@ -46,7 +51,7 @@ class HTMLConverter {
                 getIssueLink(
                     periodRange = periodRange,
                     issueId = issueId ?: "",
-                    url = href ?: "",
+                    url = url,
                     title = titles[index].text(),
                     subTitle = subTitles[index].text(),
                     minVersion = versionRange.toMinVersion(),
@@ -115,11 +120,47 @@ class HTMLConverter {
             }
         }
     }
+
+    fun mergeIssueLinks(
+        list1: List<IssueLink>, // eventCountIn90Days와 userCountIn90Days가 -1인 목록
+        list2: List<IssueLink>  // eventCountIn24와 userCountIn24가 -1인 목록
+    ): List<IssueLink> {
+        val combinedMap = mutableMapOf<String, IssueLink>()
+
+        // 첫 번째 목록의 데이터 추가
+        for (issueLink in list1) {
+            combinedMap[issueLink.issueId] = issueLink
+        }
+
+        // 두 번째 목록의 데이터 추가 및 업데이트
+        for (issueLink in list2) {
+            val existingLink = combinedMap[issueLink.issueId]
+            if (existingLink != null) {
+                // 기존 데이터가 있을 경우 값 업데이트
+                combinedMap[issueLink.issueId] = existingLink.copy(
+                    eventCountIn24 = if (existingLink.eventCountIn24 == -1) issueLink.eventCountIn24 else existingLink.eventCountIn24,
+                    userCountIn24 = if (existingLink.userCountIn24 == -1) issueLink.userCountIn24 else existingLink.userCountIn24,
+                    eventCountIn90Days = if (existingLink.eventCountIn90Days == -1) issueLink.eventCountIn90Days else existingLink.eventCountIn90Days,
+                    userCountIn90Days = if (existingLink.userCountIn90Days == -1) issueLink.userCountIn90Days else existingLink.userCountIn90Days
+                )
+            } else {
+                // 기존 데이터가 없으면 새로 추가
+                combinedMap[issueLink.issueId] = issueLink
+            }
+        }
+
+        // 최종적으로 combinedMap의 값을 리스트로 변환하여 반환
+        return combinedMap.values.toList()
+    }
 }
 
 enum class CrashPeriodRange {
     LastTwentyFourHours,
     LastNinetyDays,
+}
+
+fun String.getPath(): String {
+    return this.substringBefore("?")
 }
 
 fun String.toMinVersion(): String {
