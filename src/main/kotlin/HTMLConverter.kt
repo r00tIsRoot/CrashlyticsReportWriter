@@ -1,3 +1,5 @@
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
@@ -12,11 +14,17 @@ class HTMLConverter {
         val jiraLink: String,
         val minVersion: String?,
         val latestVersion: String,
-        val eventCountIn24: Int,
-        val userCountIn24: Int,
-        val eventCountIn90Days: Int,
-        val userCountIn90Days: Int,
+        var eventCountIn24: Int,
+        var userCountIn24: Int,
+        var eventCountIn90Days: Int,
+        var userCountIn90Days: Int,
     )
+
+    fun parseJsonToIssueLinks(jsonString: String): List<IssueLink> {
+        val gson = Gson()
+        val listType = object : TypeToken<List<IssueLink>>() {}.type
+        return gson.fromJson(jsonString, listType)
+    }
 
     fun extractIssueLinks(html: String, periodRange: CrashPeriodRange): List<IssueLink> {
         // Parse the HTML document

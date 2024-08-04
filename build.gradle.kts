@@ -19,6 +19,7 @@ repositories {
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation("org.jsoup:jsoup:1.15.3")
+    implementation("com.google.code.gson:gson:2.9.0")
 }
 
 kotlin {
