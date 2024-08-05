@@ -68,12 +68,21 @@ fun App() {
             Spacer(modifier = Modifier.height(16.dp))
             Text(outputText)
 
+            TextField(
+                value = reportText,
+                onValueChange = {},
+                modifier = Modifier.fillMaxWidth(),
+                maxLines = 3,
+                label = { Text("report 출력") },
+                readOnly = true
+            )
             // JSON 출력 필드
             if (showJsonOutput) {
                 TextField(
                     value = jsonOutputText,
                     onValueChange = {},
                     modifier = Modifier.fillMaxWidth(),
+                    maxLines = 3,
                     label = { Text("JSON 출력") },
                     readOnly = true
                 )
