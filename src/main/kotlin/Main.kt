@@ -105,6 +105,12 @@ suspend fun processInput(
         // JSON 문자열을 파싱하여 originIssueLink 리스트에 추가
         originIssueLink.clear()
         originIssueLink.addAll(HTMLConverter().parseJsonToIssueLinks(input))
+        originIssueLink.forEach {
+            it.eventCountIn24 = -1
+            it.userCountIn24 = -1
+            it.eventCountIn90Days = -1
+            it.eventCountIn90Days = -1
+        }
     } else if (isHtml24) {
         // 24시간 기준 HTML 문자열 처리
         val issueLinks = HTMLConverter().extractIssueLinks(input, CrashPeriodRange.LastTwentyFourHours)
