@@ -145,7 +145,7 @@ fun generateReportText(issueLinks: List<HTMLConverter.IssueLink>, title: String)
         append(title)
         append("\n")
         issueLinks.forEachIndexed { index, issueLink ->
-            append("${index + 1}. ${issueLink.title} (v2.4.9 수정 예정)\n")
+            append("${index + 1}. ${issueLink.title} (v${issueLink.latestVersion} 수정 예정)\n")
             append("현상 : ${issueLink.description}\n")
             append("사용자 : ${issueLink.userCountIn24}, 이벤트 : ${issueLink.eventCountIn24}\n")
             append("90일 기준 사용자 : ${issueLink.userCountIn90Days}, 이벤트 : ${issueLink.eventCountIn90Days}\n\n")
