@@ -27,7 +27,7 @@ const links = document.querySelectorAll("a");
 // 각 링크에 대해 href 값을 업데이트
 links.forEach(link => {
     // 마우스 오버 이벤트가 발생했을 때의 실제 href 값을 가져옵니다.
-    link.dispatchEvent(new MouseEvent('mouseover'));
+    link.dispatchEvent(new MouseEvent('focus'));
     
     // 실제 href 값을 가져와서 업데이트
     const realHref = link.getAttribute("href");
